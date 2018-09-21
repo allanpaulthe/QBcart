@@ -1,0 +1,22 @@
+sonar_preview:
+  image: sonar-server:5000/sonar-runner-qbc:latest
+  tags:
+   - QBC-internal
+  script:
+   - sonar-runner -Dsonar.analysis.mode=preview -Dsonar.gitlab.commit_sha=$CI_BUILD_REF -Dsonar.gitlab.ref_name=$CI_BUILD_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_PATH
+  only:
+   - triggers
+
+
+sonarqube:
+   image: sonar-server:5000/sonar-runner-qbc:latest
+   tags:
+    - QBC-internal
+   script:
+    - sonar-runner
+   only:
+    - developer
+
+
+
+

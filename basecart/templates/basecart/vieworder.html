@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+{% load basecart_extras %}
+{% load static %}
+<html>
+<head>
+	<title>My Orders</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+	{% if user.is_authenticated %}
+	<div class="headline">
+		<ul>
+			<li class="slinefont">
+				<font class="slinefont"> <font color=red>
+				Q</font>Bcart </font>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'index' %}">
+					<font class="linefont"> Home </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'viewcart' %}">
+					<font class="linefont"> Cart( {% items_in_cart user.id %} ) </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'vieworder' %}">
+					<font class="linefont"> My Orders </font>
+				</a>
+			</li>
+			{% if user.role == 'SL' %}
+			<li class="normal-li">
+				<a href="{% url 'myproducts'%}">
+					<font class="linefont"> My Products </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{% url 'addproduct' %}">
+					<font class="linefont"> Add Product </font>
+				</a>
+			</li>
+			{%endif%}
+			{% if user.username == 'admin' %}
+			<li class="normal-li">
+				<a href="{%url 'cartuseradmin'%}">
+					<font class="linefont"> Admin Page </font>
+				</a>
+			</li>
+			{%endif%}
+			<li class="fa fa-user fa-lg">
+				<a href="">
+					<font class="linefont">{{user}} </font>
+					<div class="dropdown">
+					<a href="{% url 'logout' %}">
+						<font class="logout">Logout</font>
+					</a>
+				</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div id="headlabel">
+		<h2 class="headings">My Orders</h2>
+	</div>
+	<div id="headlabel">
+		<h3 class="headings">Active:</h3>
+	</div>
+	<div id="lines">
+{% for order in object_list %}
+{% if order.status == 'PL' %}
+<div class="productbox">
+	<a href="{% url 'productdetail' order.product.id %}">
+	<div class="image-container">
+		<img src="{{ order.product.photo.url }}" class="img-responsive">
+	</div>
+	<div class="producttitle">{{ order.product.name }}</div>
+	<div class="productprice">
+		<div class="pricetext">Rs.{%multiply order.product.cost order.quantity%}</div>
+		<div class="datetext">Date:{{order.order_date}}</div>
+		<form action="{% url 'vieworder' %}">
+			<input type="hidden" name="cancel" value="{{order.id}}">
+			<button class="order-btn" type="submit">Cancel</button>
+		</form>
+	</div>
+	</a>
+</div>
+{% endif %}
+{% empty %}
+<p>No Active orders</p>
+{% endfor %}
+</div>
+</br>
+<div id="headlabel">
+	<h3 class="headings">Cancelled:</h3>
+</div>
+<div id="lines">
+{% for order in object_list %}
+{% if order.status == 'CN' %}
+<div class="productbox">
+	<a href="{% url 'productdetail' order.product.id %}">
+	<div class="image-container">
+		<img src="{{ order.product.photo.url }}" class="img-responsive">
+	</div>
+	<div class="producttitle">{{ order.product.name }}</div>
+	<div class="productprice">
+		<div class="pricetext">Rs.{%multiply order.product.cost order.quantity%}</div>
+		<div class="datetext">Date:{{order.order_date}}</div>
+		<form action="{% url 'vieworder' %}">
+			<input type="hidden" name="remove" value="{{order.id}}">
+			<button class="order-btn" type="submit">Delete</button>
+		</form>
+	</div>
+	</a>
+</div>
+{% endif %}
+{% empty %}
+<p>No Cancellations yet</p>
+{% endfor %}
+</div>
+{%endif%}
+<div class="bottomline">
+	<font class="blinefont">Copy Right © 2018 All Rights Reserved</font>
+</div>
+</body>
+</html>

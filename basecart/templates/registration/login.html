@@ -1,0 +1,42 @@
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<head>
+	<title>Login</title>
+</head>
+<body>
+	<div class="headline">
+		<ul>
+			<li class="slinefont">
+				<font class="slinefont"> <font color=red>
+				Q</font>Bcart </font>
+			</li>
+		</ul>
+	</div>
+	<div class="content">
+		{% block content %}
+		<div class="login-div">
+			<a href="{% url 'index' %}">
+					<i class="fa fa-times fa-lg"></i>
+			</a>
+			<h2 class="login-head">Login</h2>
+			<form class="login" method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<div class="login-btn-tab">
+					<button class="login-btn" type="submit">Login</button>
+				</div>
+				<p class="register">
+					Not a User?
+					<a href="{% url 'signup' %}"> 
+						<font color="#e40046"> Register </font>
+					</a>
+				</p>
+			</form>
+		</div>
+		{% endblock %}	
+	</div>
+	<div class="bottomline">
+		<font color="white">Copy Right © 2018 All Rights Reserved</font>
+	</div>
+</body>

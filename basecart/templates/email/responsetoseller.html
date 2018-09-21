@@ -1,0 +1,23 @@
+<style type="text/css">
+	body{
+		font-family: Arial, Helvetica, sans-serif;
+	}
+</style>
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	Hi {{seller}},<br/>
+order for <br/>
+<ol>
+	{% for order in orders_list %}
+	<li>{{order.product}} of {{order.quantity}} units</li>
+	{% endfor %}
+</ol>
+has been placed by {{username}} succesfully<br/>
+Thanks,<br/>
+<font color="red">Q</font>Bcart
+</body>
+</html>

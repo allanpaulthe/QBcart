@@ -1,0 +1,148 @@
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<head>
+	<title>QBcart: Add Product</title>
+	<style type="text/css">
+	p{
+		display: inline-block;
+		width:90%;
+	}
+	input,textarea,select{
+		float: right;
+	}
+	</style>
+</head>
+<body>
+	{% if user.is_authenticated and user.username == "admin" %}
+	<div class="headline">
+		<ul>
+			<li class="slinefont">
+				<font class="slinefont"> <font color=red>
+				Q</font>Bcart Admin</font>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'index' %}">
+					<font class="linefont"> Home </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'productadmin' %}">
+					<font class="linefont"> Product </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'cartadmin' %}">
+					<font class="linefont"> Cart </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'orderadmin' %}">
+					<font class="linefont"> Order </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'activityadmin' %}">
+					<font class="linefont"> Activity Log </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'viewperiod' %}">
+					<font class="linefont"> Period </font>
+				</a>
+			</li>
+			<li class="fa fa-user fa-lg">
+				<a href="">
+					<font class="linefont">{{user}} </font>
+					<div class="dropdown">
+					<a href="{% url 'logout' %}">
+						<font class="logout">Logout</font>
+					</a>
+				</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="items">
+	<div class="sidetab">
+		<ul class="listpanel">
+			<li id="activeli" class="listitems">
+			<h3>
+				<font class="linefont">BaseCart</font>
+			</h3>
+			</li>
+			<li class="listitems">
+					<a href="{%url 'cartuseradmin'%}">
+				<font class="linefont">Users</font>
+					</a>
+			</li>
+			<li class="listitems">
+					<a href="{%url 'productadmin'%}">
+				<font class="linefont">Product</font>
+					</a>
+			</li>
+			<li class="listitems">
+					<a href="{%url 'cartadmin'%}">
+						<font class="linefont">Cart</font>
+					</a>
+			</li>
+			<li class="listitems">
+					<a href="{%url 'orderadmin'%}">
+						<font class="linefont">Order</font>
+					</a>
+			</li>
+			<li class="listitems">
+					<a href="{%url 'activityadmin'%}">
+						<font class="linefont">Activity Log</font>
+					</a>
+			</li>
+			<li id="activeli" class="listitems">
+					<a href="{%url 'viewperiod'%}">
+						<font class="linefont">Period</font>
+					</a>
+			</li>
+		</ul>
+	</div>
+		{% block content %}
+		<div class="addproduct-div">
+			<a href="{% url 'orderadmin' %}">
+				<i class="fa fa-times fa-lg"></i>
+			</a>
+			<h2 class="addproduct-head">Edit Period
+			</h2>
+			<form class="addproduct" method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<div class="addproduct-btn-tab">
+					<button class="addproduct-btn" type="submit">SET</button>
+				</div>
+			</form>
+		</div>
+	{% endblock %}
+	</div>
+	{% else %}
+<div class="headline">
+		<ul>
+			<li class="slinefont">
+				<font class="slinefont"> <font color=red>
+				Q</font>Bcart </font>
+			</li>
+			<li class="fa fa-user fa-lg">
+				<a href="{% url 'login' %}">
+					<font class="Llinefont"> Login </font>
+				</a>
+				<font class="linefont"> or </font>
+				<a href="{% url 'signup' %}">
+					<font class="Llinefont"> Sign Up </font>
+				</a>
+			</li>
+		</ul>
+ </div>
+ <div>
+ 	You are Not authorised
+ </div>
+	{%endif%}
+	<div class="bottomline">
+		<font class="blinefont">Copy Right © 2018 All Rights Reserved</font>
+	</div>
+ </body>

@@ -1,0 +1,51 @@
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<head>
+	<title>QBcart: Signup</title>
+	<style type="text/css">
+	select{
+		float: right;
+		position: relative;
+		right: 168px;
+	}
+
+	input{
+		float: right;
+		position: relative;
+		width: 250px;
+	}
+	ul{
+		display: none;
+	}
+	li:hover{
+		background-color: #ffffff;
+	}
+	</style>
+</head>
+<body>
+	<div class="headline">
+		<p class="pliefont">
+			<font class="plinefont"> <font color=red>
+			Q</font>Bcart </font>
+		</p>
+	</div>
+	{% block content %}
+	<div class="signup-div">
+		<a href="{% url 'index' %}">
+			<i class="fa fa-times fa-lg"></i>
+		</a>
+		<h2 class="signup-head">Sign up</h2>
+		<form class="signup" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<div class="signup-btn-tab">
+			<button class="signup-btn" type="submit">Sign up</button>
+		</div>
+		</form>
+		{% endblock %}
+		<div class="bottomline">
+			<font color="white">Copy Right © 2018 All Rights Reserved</font>
+		</div>
+	</div>
+ </body>

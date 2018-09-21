@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+{% load basecart_extras %}
+{%load static%}
+<head>
+	<title>Place Order</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+	{% if user.is_authenticated %}
+	<div class="headline">
+		<ul>
+			<li class="slinefont">
+				<font class="slinefont"> <font color=red>
+				Q</font>Bcart </font>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'index' %}">
+					<font class="linefont"> Home </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'viewcart' %}">
+					<font class="linefont"> Cart( {% items_in_cart user.id %} ) </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'vieworder' %}">
+					<font class="linefont"> My Orders </font>
+				</a>
+			</li>
+			{% if user.role == 'SL' %}
+			<li class="normal-li">
+				<a href="{% url 'myproducts'%}">
+					<font class="linefont"> My Products </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{% url 'addproduct' %}">
+					<font class="linefont"> Add Product </font>
+				</a>
+			</li>
+			{%endif%}
+			{% if user.username == 'admin' %}
+			<li class="normal-li">
+				<a href="{%url 'cartuseradmin'%}">
+					<font class="linefont"> Admin Page </font>
+				</a>
+			</li>
+			{%endif%}
+			<li class="fa fa-user fa-lg">
+				<a href="">
+					<font class="linefont">{{user}} </font>
+					<div class="dropdown">
+					<a href="{% url 'logout' %}">
+						<font class="logout">Logout</font>
+					</a>
+				</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div id="headlabel">
+		<h2 class="headings">Place Order</h2>
+	</div>
+	<div id="lines">
+{% for orderItem in object_list %}
+<div class="productbox">
+	<form action="{% url 'placeorder' %}">
+		<input type="hidden" name="delorder" value="{{orderItem.id}}">
+		<button class="fabutton" type="submit">
+			<i class="fa fa-times fa-lg"></i>
+		</button>
+	</form>
+	<a href="{% url 'productdetail' orderItem.product.id %}">
+	<div class="image-container">
+		<img src="{{ orderItem.product.photo.url }}" class="img-responsive">
+	</div>
+	<div class="producttitle">{{ orderItem.product.name }}</div>
+	<div class="productprice">
+		<div class="pricetext">Cost:Rs.{{ orderItem.price }}</div>
+	</div>
+	</a>
+</div>
+{% empty %}
+<p>No items in</p>
+{% endfor %}
+{% items_in_order user.id as items %}
+{% if items != 0 %}
+<div class="productprice">
+	<div class="order-pricetext">Total:Rs.{% totprice object_list %}</div>
+</div>
+{% if user.address == '' %}
+<div class="productprice">
+<form class="order" action="{% url 'placeorder' %}">
+	<input type="text" name="address">
+	<button class="order-btn" type=submit>Set Address</button>
+</form>
+</div>
+{% else %}
+<div class="productprice">
+	<div class="delivery-address">
+		delivery address:{{object_list.0.user.address}}
+		<form action="{% url 'placeorder' %}">
+			<input type="text" name="address">
+			<button class="order-btn" type=submit>Change Address</button>
+		</form>
+	</div>
+</div>
+</br>
+<form class="order" action="{% url 'vieworder' %}">
+	<input type="hidden" name="deliver" value={{user.id}}>
+	<button class="order-btn" type=submit>Order</button>
+</form>
+{% endif %}
+{% endif %}
+{% endif %}
+</div>
+<div class="bottomline">
+		<font class="blinefont">Copy Right © 2018 All Rights Reserved</font>
+</div>
+</body>
+</html>

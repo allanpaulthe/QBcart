@@ -1,0 +1,28 @@
+<style type="text/css">
+	body{
+		font-family: Arial, Helvetica, sans-serif;
+	}
+</style>
+<!DOCTYPE html>
+{% load basecart_extras %}
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	Hi Admin,<br/>
+{% if object_list %}
+Order for the items:<br/>
+<ol>
+	{% for order in object_list %}
+	<li>{{order.product}} of {{order.quantity}} units</li>
+	{% endfor %}
+</ol>
+has been placed between {{start}} and {{end}}, summing up to a total of Rs.{% totprice object_list %}.<br/>
+{% else %}
+No orders have been placed between {{start}} and {{end}}.
+{% endif %}
+Thanks,<br/>
+<font color="red">Q</font>Bcart
+</body>
+</html>

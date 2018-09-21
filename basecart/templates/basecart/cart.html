@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+{% load basecart_extras %}
+{% load static %}
+<head>
+	<title>Cart</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+	{% if user.is_authenticated %}
+	<div class="headline">
+		<ul>
+			<li class="slinefont">
+				<font class="slinefont"> <font color=red>
+				Q</font>Bcart </font>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'index' %}">
+					<font class="linefont"> Home </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'viewcart' %}">
+					<font class="linefont"> Cart( {% items_in_cart user.id %} )</font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{%url 'vieworder' %}">
+					<font class="linefont"> My Orders </font>
+				</a>
+			</li>
+			{% if user.role == 'SL' %}
+			<li class="normal-li">
+				<a href="{% url 'myproducts'%}">
+					<font class="linefont"> My Products </font>
+				</a>
+			</li>
+			<li class="normal-li">
+				<a href="{% url 'addproduct' %}">
+					<font class="linefont"> Add Product </font>
+				</a>
+			</li>
+			{%endif%}
+			{% if user.username == 'admin' %}
+			<li class="normal-li">
+				<a href="{%url 'cartuseradmin'%}">
+					<font class="linefont"> Admin Page </font>
+				</a>
+			</li>
+			{%endif%}
+			<li class="fa fa-user fa-lg">
+				<a href="">
+					<font class="linefont">{{user}} </font>
+					<div class="dropdown">
+					<a href="{% url 'logout' %}">
+						<font class="logout">Logout</font>
+					</a>
+				</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div id="headlabel">
+		<h2 class="headings">Cart</h2>
+	</div>
+	<div id="lines">
+{% for cartItem in object_list %}
+{% if cartItem.status == 'IO'%}
+	<div class="cartbox">
+		<form action="{% url 'viewcart' %}">
+			<input type="hidden" name="delcart" value="{{cartItem.id}}">
+			<button class="fabutton" type="submit">
+				<i class="fa fa-times fa-lg"></i>
+			</button>
+		</form>
+		<div class="carttitle">
+			<div class="cart-item-container">
+				<a href="{% url 'productdetail' cartItem.product.id %}">
+				<div class="cart-image-container">
+					<img src="{{ cartItem.product.photo.url }}" class="img-responsive">
+				</div>
+				</a>
+			</div>
+			<div class="cart-item-container">
+			<a href="{% url 'productdetail' cartItem.product.id %}">
+				<font color='black'>{{ cartItem.product.name }}</font>
+			</a>
+			</div>
+			<div class="cart-item-container">
+				<form action="{% url 'viewcart' %}">
+					<input type="hidden" name="id" value="{{cartItem.id}}">
+					<input type="hidden" name="status" value="1">
+					<button class="wishlist-btn" type="submit">Move to Wishlist</button>
+				</form>	
+			</div>
+			<div class="cart-item-container">
+				<form action="{% url 'viewcart' %}">
+					<input type="hidden" name="id" value="{{cartItem.id}}">
+					Quantity:
+					<input class="qty-text" type="text" name="qty" value="{{cartItem.quantity}}">
+					</br>
+					<button class="wishlist-btn" type="submit">Update</button>
+				</form>
+			</div>
+		</div>
+		<div class="cartprice">
+			<div class="pricetext">Cost:Rs.{% multiply cartItem.quantity cartItem.product.cost %}</div>
+		</div>
+	</div>
+{% endif %}
+{% endfor %}
+</div>
+{% items_in_cart user.id as items %}
+{% if items != 0 %}
+<form action="{% url 'placeorder' %}">
+	<input type="hidden" name="checkout" value="{{user.id}}">
+	<div class="checkout-btn-tab">
+		<button class="checkout-btn" type=submit>Checkout</button>
+	</div>
+</form>
+{% else %}
+<p>Cart empty</p>
+{% endif %}
+</br>
+<div id="headlabel">
+	<h2 class="headings">Wishlist</h2>
+</div>
+<div id="lines">
+{% for cartItem in object_list %}
+{% if cartItem.status == 'IC'%}
+	<div class="cartbox">
+		<form action="{% url 'viewcart' %}">
+			<input type="hidden" name="delcart" value="{{cartItem.id}}">
+			<button class="fabutton" type="submit">
+				<i class="fa fa-times fa-lg"></i>
+			</button>
+		</form>
+		<div class="carttitle">
+			<div class="cart-item-container">
+				<a href="{% url 'productdetail' cartItem.product.id %}">
+				<div class="cart-image-container">
+					<img src="{{ cartItem.product.photo.url }}" class="img-responsive">
+				</div>
+				</a>
+			</div>
+			<div class="cart-item-container">
+			<a href="{% url 'productdetail' cartItem.product.id %}">
+				<font color='black'>{{ cartItem.product.name }}</font>
+			</a>
+			</div>
+			<div class="cart-item-container">
+				<form action="{% url 'viewcart' %}">
+					<input type="hidden" name="id" value="{{cartItem.id}}">
+					<input type="hidden" name="status" value="2">
+					<button class="wishlist-btn" type="submit">Move to Cart</button>
+				</form>	
+			</div>
+			<div class="cart-item-container">
+				<form action="{% url 'viewcart' %}">
+					<input type="hidden" name="id" value="{{cartItem.id}}">
+					Quantity:
+					<input class="qty-text" type="text" name="qty" value="{{cartItem.quantity}}">
+					</br>
+					<button class="wishlist-btn" type="submit">Update</button>
+				</form>
+			</div>
+		</div>
+		<div class="cartprice">
+			<div class="pricetext">Cost:Rs.{% multiply cartItem.quantity cartItem.product.cost %}</div>
+		</div>
+	</div>
+{% endif %}
+{% empty %}
+<p>Wishlist empty</p>
+{% endfor %}
+</div>
+{% endif %}
+<div class="bottomline">
+	<font class="blinefont">Copy Right © 2018 All Rights Reserved</font>
+</div>
+</body>
+</html>
